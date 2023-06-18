@@ -3,6 +3,8 @@ import Start from './components/Start.js';
 import Chat from './components/Chat.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 
 const Stack = createNativeStackNavigator();
 
