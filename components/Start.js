@@ -71,10 +71,12 @@ const styles = StyleSheet.create({
     width: "88%",
   },
   title: {
-    fontWeight: "bold",
-    fontSize: 30,
+    fontWeight: "600",
+    fontSize: 45,
+    color: "#FFFFFF",
   },
   textInput: {
+    backgroundColor: '#ffffff',
     height: 40,
     width: "88%",
     margin: 12,
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
+    backgroundColor: "#757083",
     padding: 10,
   },
 });
