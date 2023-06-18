@@ -51,6 +51,8 @@ const Start = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      {/* Fixing the iOS Keyboard */}
+      {Platform.OS === "ios" ? (<KeyboardAvoidingView behavior='padding' />) : null}
     </ImageBackground>
   );
 }
