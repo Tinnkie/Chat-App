@@ -1,35 +1,43 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import { collection, addDoc, onSnapshot, query, orderBy, } from "firebase/firestore";
 
-const Chat = ({ route, navigation }) => {
-    const { name, color } = route.params;
+const Chat = ({ route, navigation, db }) => {
+    const { name, color, userID } = route.params;
     //create message state for GiftedChat
     const [messages, setMessages] = useState([]);
 
+
     useEffect(() => {
         navigation.setOptions({ title: name });
-        //setting the state with a static message 
-        setMessages([
-          {
-            _id: 1,
-            text: "Hello developer",
-            createdAt: new Date(),
-            user: {
-              _id: 2,
-              name: "React Native",
-              avatar: "https://placeimg.com/140/140/any",
-            },
-          },
-        ]);
+        const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+        const unsubMessages = onSnapshot(q, (docs) => {
+          let newMessages = [];
+          docs.forEach(doc => {
+            newMessages.push({
+              id: doc.id,
+              ...doc.data(),
+              createdAt: new Date(doc.data().createdAt.toMillis())
+            })
+          })
+          setMessages(newMessages);
+        })
+        return () => {
+          if (unsubMessages) unsubMessages();
+        }
+        }, []);
 
-      }, []);
+        const addMessagesItem = async (newMessage) => {
+          const newMessageRef = await addDoc(
+            collection(db, "messages"),
+            newMessage[0]
+          );
+        };
 
-      const onSend = useCallback((messages = []) => {
-        setMessages(previousMessages =>
-          GiftedChat.append(previousMessages, messages),
-        )
-      }, []);
+        const onSend = (newMessages) => {
+          addMessagesItem(newMessages);
+        };
 
       const renderBubble = (props) => {
         return <Bubble
@@ -53,8 +61,9 @@ const Chat = ({ route, navigation }) => {
       renderBubble={renderBubble}
       onSend={messages => onSend(messages)}
       user={{
-        _id: 1,
+        _id: userID,
       }}
+      name={{name: name}}
     />
     {/* Fixing the Android Keyboard */}
     { Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null }
