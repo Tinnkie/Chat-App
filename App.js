@@ -23,6 +23,16 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export default function App() {
+  const connectionStatus = useNetInfo();
+  useEffect(() => {
+    if (connectionStatus.isConnected === false) {
+      Alert.alert("Connection Lost!");
+      disableNetwork(db);
+    } else if (connectionStatus.isConnected === true) {
+      enableNetwork(db);
+    }
+  }, [connectionStatus.isConnected]);
+
   return (
     <NavigationContainer>
     <Stack.Navigator
@@ -35,6 +45,7 @@ export default function App() {
         <Stack.Screen name='Chat'>
           {(props) => (
             <Chat
+              isConnected={connectionStatus.isConnected}
               db={db}
               {...props}
             />
