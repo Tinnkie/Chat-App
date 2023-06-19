@@ -1,10 +1,12 @@
 import Start from './components/Start.js';
 import Chat from './components/Chat.js';
+import { Alert } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, disableNetwork, enableNetwork, } from "firebase/firestore";
 import { useNetInfo }from '@react-native-community/netinfo';
+import { useEffect } from "react";
 
 const Stack = createNativeStackNavigator();
 
