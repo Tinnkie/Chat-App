@@ -2,6 +2,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { TouchableOpacity, Text, View, StyleSheet } from "react-native";
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import { ref } from 'firebase/storage';
 
 const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage }) => {
     const actionSheet = useActionSheet();
@@ -21,6 +22,8 @@ const CustomActions = ({ wrapperStyle, iconTextStyle, onSend, storage }) => {
         } else Alert.alert("Error occurred while fetching location");
       } else Alert.alert("Permissions haven't been granted.");
     }
+
+    const newUploadRef = ref(storage, 'image123');
 
     const pickImage = async () => {
       let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
